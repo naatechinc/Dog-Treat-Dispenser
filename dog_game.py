@@ -2,6 +2,8 @@
 """
 🐾 DOG BUTTON GAME 🐾
 A simple cursor navigation game for dogs using a Raspberry Pi and big physical buttons.
+Includes a treat dispenser via stepper motor controlled through the Tevo Tarantula
+(MKS Base / RAMPS-style) board over USB serial using G-code.
 
 WIRING (GPIO BCM pin numbers):
   UP    button → GPIO 17  (+ GND)
@@ -12,16 +14,28 @@ WIRING (GPIO BCM pin numbers):
 Each button: one wire to the GPIO pin, other wire to any GND pin.
 Internal pull-up resistors are enabled, so no external resistors needed.
 
+TREAT DISPENSER:
+  - Connect Tevo Tarantula board to Pi via USB
+  - Stepper motor plugged into the EXTRUDER (E0) port on the board
+  - Board powers up normally (12V PSU connected)
+  - The game sends G-code over serial to rotate the extruder stepper ~90°
+    each time the dog completes a level
+  - Default USB port: /dev/ttyUSB0  (change DISPENSER_PORT below if needed)
+    Run: ls /dev/ttyUSB* to find your board's port
+
 Install dependencies:
   sudo apt update
   sudo apt install python3-pygame
-  pip3 install RPi.GPIO --break-system-packages
+  pip3 install RPi.GPIO pyserial --break-system-packages
 
 Run:
   python3 dog_game.py
 
-To run WITHOUT GPIO (keyboard testing mode):
+To run WITHOUT GPIO (keyboard + no dispenser testing mode):
   python3 dog_game.py --keyboard
+
+To run with keyboard but still test the dispenser:
+  python3 dog_game.py --keyboard --dispenser
 """
 
 import pygame
@@ -30,6 +44,81 @@ import math
 import random
 import time
 import argparse
+import threading
+
+# ─── TREAT DISPENSER (Serial / G-code) ────────────────────────────────────────
+DISPENSER_PORT     = "/dev/ttyUSB0"   # change to /dev/ttyUSB1 etc. if needed
+DISPENSER_BAUD     = 115200           # Tevo Tarantula default baud rate
+
+# How far to rotate the extruder stepper for one treat.
+# The Tevo extruder is typically 93–100 steps/mm.
+# 90° of rotation ≈ moving ~30mm of filament — adjust TREAT_MM up/down
+# to control how much your dispenser mechanism rotates.
+TREAT_MM           = 30.0            # mm of extruder movement = ~90° rotation
+TREAT_FEEDRATE     = 300             # mm/min — slow & controlled
+
+def init_dispenser(force=False):
+    """Open serial connection to the printer board. Returns serial object or None."""
+    try:
+        import serial
+        ser = serial.Serial(DISPENSER_PORT, DISPENSER_BAUD, timeout=3)
+        time.sleep(2)          # wait for board to finish reset after serial open
+        ser.flushInput()
+        # Send wake-up and configure relative extruder mode
+        for cmd in ["M110 N0", "M82"]:   # reset line numbers, absolute extrusion
+            ser.write((cmd + "\n").encode())
+            time.sleep(0.1)
+        print(f"✅ Treat dispenser connected on {DISPENSER_PORT}")
+        return ser
+    except ImportError:
+        print("⚠️  pyserial not installed — treat dispenser disabled.")
+        print("    Run: pip3 install pyserial --break-system-packages")
+        return None
+    except Exception as e:
+        if force:
+            print(f"❌ Could not open dispenser port {DISPENSER_PORT}: {e}")
+        else:
+            print(f"⚠️  Dispenser not found on {DISPENSER_PORT} — dispenser disabled.")
+            print(f"    Check USB connection or update DISPENSER_PORT in the script.")
+        return None
+
+def dispense_treat(ser):
+    """
+    Fire-and-forget treat dispense in a background thread so the game
+    never freezes waiting for G-code responses.
+    Sends:
+      G91        — relative positioning
+      G1 E<mm> F<feedrate>  — extrude TREAT_MM at TREAT_FEEDRATE
+      G90        — back to absolute positioning
+      M400       — wait for move to finish (on the board side)
+    """
+    if ser is None:
+        print("🦴 (Treat dispenser not connected — would dispense now)")
+        return
+
+    def _send():
+        try:
+            cmds = [
+                "G91",                                          # relative mode
+                f"G1 E{TREAT_MM:.1f} F{TREAT_FEEDRATE}",      # extrude
+                "G90",                                          # back to absolute
+                "M400",                                         # finish moves
+            ]
+            for cmd in cmds:
+                ser.write((cmd + "\n").encode())
+                time.sleep(0.05)
+            print("🦴 Treat dispensed!")
+        except Exception as e:
+            print(f"⚠️  Dispenser error: {e}")
+
+    threading.Thread(target=_send, daemon=True).start()
+
+def close_dispenser(ser):
+    if ser:
+        try:
+            ser.close()
+        except:
+            pass
 
 # ─── GPIO SETUP ────────────────────────────────────────────────────────────────
 GPIO_PINS = {
@@ -132,9 +221,15 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--keyboard", action="store_true",
                         help="Force keyboard mode (arrow keys), skip GPIO")
+    parser.add_argument("--dispenser", action="store_true",
+                        help="Force-enable dispenser even in keyboard mode")
     args = parser.parse_args()
 
     GPIO = None if args.keyboard else init_gpio()
+
+    # Init treat dispenser (always try unless --keyboard without --dispenser)
+    use_dispenser = (not args.keyboard) or args.dispenser
+    dispenser = init_dispenser(force=args.dispenser) if use_dispenser else None
 
     pygame.init()
     pygame.display.set_caption("🐾 Dog Button Game 🐾")
@@ -239,6 +334,7 @@ def main():
                 won = True
                 win_timer = time.time()
                 score += 1
+                dispense_treat(dispenser)   # 🦴 fire the treat dispenser!
 
         else:
             # Auto-advance after WIN_HOLD seconds
@@ -270,6 +366,12 @@ def main():
 
         hint = font_sm.render("Arrow Keys / WASD / Physical Buttons   •   ESC = Quit", True, (120,130,160))
         screen.blit(hint, (20, SCREEN_H - 28))
+
+        # Dispenser status indicator
+        disp_color = (80, 220, 120) if dispenser else (160, 80, 80)
+        disp_label = "🦴 Dispenser: READY" if dispenser else "🦴 Dispenser: OFF"
+        disp_txt = font_sm.render(disp_label, True, disp_color)
+        screen.blit(disp_txt, (SCREEN_W - disp_txt.get_width() - 20, SCREEN_H - 28))
 
         # On-screen arrow buttons
         for d, rect in btn_rects.items():
@@ -305,6 +407,7 @@ def main():
 
     if GPIO:
         GPIO.cleanup()
+    close_dispenser(dispenser)
     pygame.quit()
     sys.exit()
 

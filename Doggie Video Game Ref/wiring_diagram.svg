@@ -1,0 +1,210 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" width="900" height="620" font-family="monospace">
+
+  <!-- Background -->
+  <rect width="900" height="620" fill="#1a1a2e"/>
+  <text x="450" y="35" text-anchor="middle" fill="#e0e0ff" font-size="22" font-weight="bold">🐾 Dog Game — Raspberry Pi 3B+ Wiring Diagram</text>
+
+  <!-- ═══════════════════════════════════════════════
+       PI BOARD
+  ════════════════════════════════════════════════ -->
+  <!-- Board body -->
+  <rect x="280" y="60" width="220" height="400" rx="12" fill="#1e7a1e" stroke="#33cc33" stroke-width="2"/>
+  <text x="390" y="85" text-anchor="middle" fill="#aaffaa" font-size="13" font-weight="bold">Raspberry Pi 3B+</text>
+
+  <!-- GPIO Header label -->
+  <text x="390" y="105" text-anchor="middle" fill="#88cc88" font-size="10">40-pin GPIO Header</text>
+
+  <!-- PIN ROWS — left col (odd) and right col (even) -->
+  <!-- We show only the pins we care about, plus their neighbors for context -->
+  <!-- Each pin row: y spacing = 18px, starting at y=115 -->
+  <!-- Pin 1 = top left, Pin 2 = top right -->
+
+  <!-- Pin grid: 20 rows, 2 cols -->
+  <!-- Left col x=330, Right col x=430 -->
+
+  <!-- Draw all 40 pins as small squares -->
+  <g fill="#888" stroke="#555" stroke-width="1">
+    <!-- Row 1: pin1, pin2 -->
+    <rect x="323" y="112" width="14" height="14" rx="2"/>
+    <rect x="363" y="112" width="14" height="14" rx="2"/>
+    <!-- Row 2: pin3, pin4 -->
+    <rect x="323" y="130" width="14" height="14" rx="2"/>
+    <rect x="363" y="130" width="14" height="14" rx="2"/>
+    <!-- Row 3: pin5, pin6 -->
+    <rect x="323" y="148" width="14" height="14" rx="2"/>
+    <rect x="363" y="148" width="14" height="14" rx="2"/>
+    <!-- Row 4: pin7, pin8 -->
+    <rect x="323" y="166" width="14" height="14" rx="2"/>
+    <rect x="363" y="166" width="14" height="14" rx="2"/>
+    <!-- Row 5: pin9, pin10 -->
+    <rect x="323" y="184" width="14" height="14" rx="2"/>
+    <rect x="363" y="184" width="14" height="14" rx="2"/>
+    <!-- Row 6: pin11(GPIO17), pin12 -->
+    <rect x="363" y="202" width="14" height="14" rx="2"/>
+    <!-- Row 7: pin13(GPIO27), pin14 -->
+    <rect x="363" y="220" width="14" height="14" rx="2"/>
+    <!-- Row 8: pin15(GPIO22), pin16(GPIO23) -->
+    <rect x="363" y="256" width="14" height="14" rx="2"/>
+    <!-- Row 9 -->
+    <rect x="323" y="274" width="14" height="14" rx="2"/>
+    <rect x="363" y="274" width="14" height="14" rx="2"/>
+    <!-- Row 10 -->
+    <rect x="323" y="292" width="14" height="14" rx="2"/>
+    <rect x="363" y="292" width="14" height="14" rx="2"/>
+  </g>
+
+  <!-- HIGHLIGHT the 5 pins we use -->
+  <!-- Pin 6 = GND (row3 right = y148) -->
+  <rect x="363" y="148" width="14" height="14" rx="2" fill="#222" stroke="#ff4444" stroke-width="2"/>
+  <!-- Pin 11 = GPIO17 UP (row6 left = y202) -->
+  <rect x="323" y="202" width="14" height="14" rx="2" fill="#222" stroke="#00aaff" stroke-width="2"/>
+  <!-- Pin 13 = GPIO27 DOWN (row7 left = y220) -->
+  <rect x="323" y="220" width="14" height="14" rx="2" fill="#222" stroke="#ffaa00" stroke-width="2"/>
+  <!-- Pin 15 = GPIO22 LEFT (row8 left = y238) -->
+  <rect x="323" y="238" width="14" height="14" rx="2" fill="#222" stroke="#00dd88" stroke-width="2"/>
+  <!-- Pin 16 = GPIO23 RIGHT (row8 right = y238) -->
+  <rect x="363" y="238" width="14" height="14" rx="2" fill="#222" stroke="#cc44ff" stroke-width="2"/>
+
+  <!-- Pin labels on board -->
+  <text x="318" y="122" text-anchor="end" fill="#666" font-size="9">3V3 1</text>
+  <text x="383" y="122" fill="#666" font-size="9">2 5V</text>
+  <text x="318" y="140" text-anchor="end" fill="#666" font-size="9">SDA 3</text>
+  <text x="383" y="140" fill="#666" font-size="9">4 5V</text>
+  <text x="318" y="158" text-anchor="end" fill="#666" font-size="9">SCL 5</text>
+  <text x="383" y="158" fill="#ff4444" font-size="9" font-weight="bold">6 GND</text>
+  <text x="318" y="176" text-anchor="end" fill="#666" font-size="9">GP4 7</text>
+  <text x="383" y="176" fill="#666" font-size="9">8 TX</text>
+  <text x="318" y="194" text-anchor="end" fill="#666" font-size="9">GND 9</text>
+  <text x="383" y="194" fill="#666" font-size="9">10 RX</text>
+  <text x="318" y="212" text-anchor="end" fill="#00aaff" font-size="9" font-weight="bold">GP17 11</text>
+  <text x="383" y="212" fill="#666" font-size="9">12 GP18</text>
+  <text x="318" y="230" text-anchor="end" fill="#ffaa00" font-size="9" font-weight="bold">GP27 13</text>
+  <text x="383" y="230" fill="#666" font-size="9">14 GND</text>
+  <text x="318" y="248" text-anchor="end" fill="#00dd88" font-size="9" font-weight="bold">GP22 15</text>
+  <text x="383" y="248" fill="#cc44ff" font-size="9" font-weight="bold">16 GP23</text>
+  <text x="318" y="266" text-anchor="end" fill="#666" font-size="9">3V3 17</text>
+  <text x="383" y="266" fill="#666" font-size="9">18 GP24</text>
+  <text x="318" y="284" text-anchor="end" fill="#666" font-size="9">MOSI19</text>
+  <text x="383" y="284" fill="#666" font-size="9">20 GND</text>
+
+  <!-- ═══════════════════════════════════════════════
+       WIRES from Pi to buttons
+  ════════════════════════════════════════════════ -->
+
+  <!-- UP button wire: Pin11 GPIO17 → blue -->
+  <line x1="323" y1="209" x2="100" y2="209" stroke="#00aaff" stroke-width="2.5" stroke-dasharray="6,3"/>
+  <line x1="100" y1="209" x2="100" y2="310" stroke="#00aaff" stroke-width="2.5"/>
+
+  <!-- DOWN button wire: Pin13 GPIO27 → orange -->
+  <line x1="323" y1="227" x2="110" y2="227" stroke="#ffaa00" stroke-width="2.5" stroke-dasharray="6,3"/>
+  <line x1="110" y1="227" x2="110" y2="390" stroke="#ffaa00" stroke-width="2.5"/>
+
+  <!-- LEFT button wire: Pin15 GPIO22 → green -->
+  <line x1="323" y1="245" x2="120" y2="245" stroke="#00dd88" stroke-width="2.5" stroke-dasharray="6,3"/>
+  <line x1="120" y1="245" x2="120" y2="470" stroke="#00dd88" stroke-width="2.5"/>
+
+  <!-- RIGHT button wire: Pin16 GPIO23 → purple -->
+  <line x1="377" y1="238" x2="377" y2="520" stroke="#cc44ff" stroke-width="2.5" stroke-dasharray="6,3"/>
+  <line x1="377" y1="520" x2="700" y2="520" stroke="#cc44ff" stroke-width="2.5"/>
+  <line x1="700" y1="520" x2="700" y2="470" stroke="#cc44ff" stroke-width="2.5"/>
+
+  <!-- GND wire: Pin6 → red (shared ground rail) -->
+  <line x1="377" y1="148" x2="377" y2="80" stroke="#ff4444" stroke-width="2.5" stroke-dasharray="6,3"/>
+  <line x1="377" y1="80" x2="750" y2="80" stroke="#ff4444" stroke-width="2.5"/>
+  <line x1="750" y1="80" x2="750" y2="560" stroke="#ff4444" stroke-width="2.5"/>
+  <!-- GND drops to each button -->
+  <line x1="750" y1="330" x2="720" y2="330" stroke="#ff4444" stroke-width="2"/>
+  <line x1="750" y1="410" x2="720" y2="410" stroke="#ff4444" stroke-width="2"/>
+  <line x1="750" y1="490" x2="720" y2="490" stroke="#ff4444" stroke-width="2"/>
+  <line x1="750" y1="310" x2="750" y2="310" stroke="#ff4444" stroke-width="2"/>
+  <!-- GND to UP button -->
+  <line x1="130" y1="330" x2="100" y2="330" stroke="#ff4444" stroke-width="2"/>
+  <!-- GND to DOWN -->
+  <line x1="130" y1="410" x2="110" y2="410" stroke="#ff4444" stroke-width="2"/>
+  <!-- GND to LEFT -->
+  <line x1="130" y1="490" x2="120" y2="490" stroke="#ff4444" stroke-width="2"/>
+
+  <!-- ═══════════════════════════════════════════════
+       BUTTONS
+  ════════════════════════════════════════════════ -->
+
+  <!-- UP Button -->
+  <rect x="60" y="300" width="80" height="50" rx="10" fill="#1a3a5a" stroke="#00aaff" stroke-width="3"/>
+  <text x="100" y="321" text-anchor="middle" fill="#00aaff" font-size="18" font-weight="bold">▲</text>
+  <text x="100" y="340" text-anchor="middle" fill="#88ccff" font-size="10">UP</text>
+  <!-- Button terminals -->
+  <circle cx="75" cy="350" r="4" fill="#00aaff"/>
+  <circle cx="125" cy="350" r="4" fill="#ff4444"/>
+  <text x="75" y="365" text-anchor="middle" fill="#00aaff" font-size="8">GPIO17</text>
+  <text x="125" y="365" text-anchor="middle" fill="#ff4444" font-size="8">GND</text>
+
+  <!-- DOWN Button -->
+  <rect x="60" y="380" width="80" height="50" rx="10" fill="#3a2a1a" stroke="#ffaa00" stroke-width="3"/>
+  <text x="100" y="401" text-anchor="middle" fill="#ffaa00" font-size="18" font-weight="bold">▼</text>
+  <text x="100" y="420" text-anchor="middle" fill="#ffcc88" font-size="10">DOWN</text>
+  <circle cx="75" cy="430" r="4" fill="#ffaa00"/>
+  <circle cx="125" cy="430" r="4" fill="#ff4444"/>
+  <text x="75" y="445" text-anchor="middle" fill="#ffaa00" font-size="8">GPIO27</text>
+  <text x="125" y="445" text-anchor="middle" fill="#ff4444" font-size="8">GND</text>
+
+  <!-- LEFT Button -->
+  <rect x="60" y="460" width="80" height="50" rx="10" fill="#1a3a2a" stroke="#00dd88" stroke-width="3"/>
+  <text x="100" y="481" text-anchor="middle" fill="#00dd88" font-size="18" font-weight="bold">◀</text>
+  <text x="100" y="500" text-anchor="middle" fill="#88ffcc" font-size="10">LEFT</text>
+  <circle cx="75" cy="510" r="4" fill="#00dd88"/>
+  <circle cx="125" cy="510" r="4" fill="#ff4444"/>
+  <text x="75" y="525" text-anchor="middle" fill="#00dd88" font-size="8">GPIO22</text>
+  <text x="125" y="525" text-anchor="middle" fill="#ff4444" font-size="8">GND</text>
+
+  <!-- RIGHT Button -->
+  <rect x="660" y="460" width="80" height="50" rx="10" fill="#2a1a3a" stroke="#cc44ff" stroke-width="3"/>
+  <text x="700" y="481" text-anchor="middle" fill="#cc44ff" font-size="18" font-weight="bold">▶</text>
+  <text x="700" y="500" text-anchor="middle" fill="#dd99ff" font-size="10">RIGHT</text>
+  <circle cx="675" cy="510" r="4" fill="#cc44ff"/>
+  <circle cx="725" cy="510" r="4" fill="#ff4444"/>
+  <text x="675" y="525" text-anchor="middle" fill="#cc44ff" font-size="8">GPIO23</text>
+  <text x="725" y="525" text-anchor="middle" fill="#ff4444" font-size="8">GND</text>
+
+  <!-- GND rail label -->
+  <text x="758" y="320" fill="#ff4444" font-size="10" font-weight="bold">GND</text>
+  <text x="758" y="333" fill="#ff4444" font-size="10" font-weight="bold">RAIL</text>
+  <text x="758" y="346" fill="#ff6666" font-size="9">(shared)</text>
+
+  <!-- ═══════════════════════════════════════════════
+       LEGEND
+  ════════════════════════════════════════════════ -->
+  <rect x="530" y="100" width="200" height="175" rx="8" fill="#111133" stroke="#444466" stroke-width="1.5"/>
+  <text x="630" y="120" text-anchor="middle" fill="#aaaacc" font-size="13" font-weight="bold">Legend</text>
+
+  <line x1="545" y1="138" x2="575" y2="138" stroke="#00aaff" stroke-width="2.5" stroke-dasharray="5,3"/>
+  <text x="582" y="142" fill="#00aaff" font-size="11">UP → GPIO 17 (Pin 11)</text>
+
+  <line x1="545" y1="158" x2="575" y2="158" stroke="#ffaa00" stroke-width="2.5" stroke-dasharray="5,3"/>
+  <text x="582" y="162" fill="#ffaa00" font-size="11">DOWN → GPIO 27 (Pin 13)</text>
+
+  <line x1="545" y1="178" x2="575" y2="178" stroke="#00dd88" stroke-width="2.5" stroke-dasharray="5,3"/>
+  <text x="582" y="182" fill="#00dd88" font-size="11">LEFT → GPIO 22 (Pin 15)</text>
+
+  <line x1="545" y1="198" x2="575" y2="198" stroke="#cc44ff" stroke-width="2.5" stroke-dasharray="5,3"/>
+  <text x="582" y="202" fill="#cc44ff" font-size="11">RIGHT → GPIO 23 (Pin 16)</text>
+
+  <line x1="545" y1="218" x2="575" y2="218" stroke="#ff4444" stroke-width="2.5"/>
+  <text x="582" y="222" fill="#ff4444" font-size="11">GND → Pin 6 (shared)</text>
+
+  <text x="545" y="248" fill="#888899" font-size="10">Each button: signal wire +</text>
+  <text x="545" y="261" fill="#888899" font-size="10">GND wire. No resistors needed.</text>
+  <text x="545" y="274" fill="#888899" font-size="10">Internal pull-ups handle it.</text>
+
+  <!-- HDMI note -->
+  <rect x="530" y="295" width="200" height="60" rx="8" fill="#111133" stroke="#444466" stroke-width="1.5"/>
+  <text x="630" y="315" text-anchor="middle" fill="#aaaacc" font-size="11" font-weight="bold">Display</text>
+  <text x="545" y="333" fill="#888899" font-size="10">HDMI port (full-size) →</text>
+  <text x="545" y="348" fill="#888899" font-size="10">TV or monitor</text>
+
+  <!-- Power note -->
+  <rect x="530" y="375" width="200" height="60" rx="8" fill="#111133" stroke="#444466" stroke-width="1.5"/>
+  <text x="630" y="395" text-anchor="middle" fill="#aaaacc" font-size="11" font-weight="bold">Power</text>
+  <text x="545" y="413" fill="#888899" font-size="10">Micro-USB, min 2.5A</text>
+  <text x="545" y="428" fill="#888899" font-size="10">Official Pi PSU recommended</text>
+
+</svg>
